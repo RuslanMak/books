@@ -18,3 +18,9 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+
+Route::get('/books', 'BooksController@index');
+Route::get('/api-all-books/{skip}/{take}', 'BooksController@allBooks');
+Route::get('/api-all-writers', 'WritersController@allWriters');
+Route::get('/api-all-genres', 'GenresController@allGenres');
+Route::post('/api-save-book', 'BooksController@store');
