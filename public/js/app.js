@@ -1880,37 +1880,44 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
+  props: ['book_id'],
   data: function data() {
     return {
+      bookDataArr: [],
       writersAll: [],
       genresAll: [],
       csrf: document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
       url: {
         allWritersData: '/api-all-writers',
         allGenresData: '/api-all-genres',
-        saveBook: '/api-save-book'
+        saveBook: '/api-save-book',
+        bookData: '/api-book/',
+        deleteBook: '/api-book-delete/',
+        updateBook: '/api-book-update/'
       },
       showModalDeleteBook: false,
       showModalCreadeBook: false,
-      createBookData: {
-        'writer': '',
-        'title': '',
-        'genre': '',
-        'pages': '',
-        'year': '',
-        'price': '',
-        'isbn': ''
-      },
+      updateBookData: {},
       have_done: 0
     };
   },
   mounted: function mounted() {
-    this.update();
+    if (this.book_id) {
+      this.showModalCreadeBook = true; // console.log(this.book_id);
+
+      this.update();
+    }
   },
   methods: {
     update: function update() {
       var _this = this;
 
+      axios.get(this.url.bookData + this.book_id).then(function (response) {
+        _this.bookDataArr = response.data;
+        console.dir(_this.bookDataArr);
+      })["catch"](function (error) {
+        console.log(error.response);
+      });
       axios.get(this.url.allWritersData).then(function (response) {
         _this.writersAll = response.data; // console.dir(this.writersAll);
       })["catch"](function (error) {
@@ -1922,23 +1929,19 @@ __webpack_require__.r(__webpack_exports__);
         console.log(error.response);
       });
     },
-    createBook: function createBook() {
-      console.dir(this.createBookData);
-      this.showModalCreadeBook = false;
-    },
     submitDo: function submitDo(event) {
       var _this2 = this;
 
       event.preventDefault();
-      this.createBookData.writer = this.$refs.writer.value;
-      this.createBookData.title = this.$refs.title.value;
-      this.createBookData.genre = this.$refs.genre.value;
-      this.createBookData.pages = this.$refs.pages.value;
-      this.createBookData.year = this.$refs.year.value;
-      this.createBookData.price = this.$refs.price.value;
-      this.createBookData.isbn = this.$refs.isbn.value;
-      console.dir(this.createBookData);
-      axios.post(this.url.saveBook, this.createBookData).then(function (response) {
+      this.updateBookData.writer = this.$refs.writer.value;
+      this.updateBookData.title = this.$refs.title.value;
+      this.updateBookData.genre = this.$refs.genre.value;
+      this.updateBookData.pages = this.$refs.pages.value;
+      this.updateBookData.year = this.$refs.year.value;
+      this.updateBookData.price = this.$refs.price.value;
+      this.updateBookData.isbn = this.$refs.isbn.value;
+      console.dir(this.updateBookData);
+      axios.post(this.url.updateBook + this.book_id, this.updateBookData).then(function (response) {
         console.log(response);
 
         _this2.update();
@@ -1951,6 +1954,19 @@ __webpack_require__.r(__webpack_exports__);
     //запуск родительской ф-ции
     onChange: function onChange() {
       this.$emit('update');
+    },
+    deleteBookFunc: function deleteBookFunc() {
+      axios["delete"](this.url.deleteBook + this.book_id).then(function (response) {
+        console.log(response);
+      })["catch"](function (error) {
+        console.log(error.response);
+      });
+      this.showModalCreadeBook = false;
+      this.onChange();
+    },
+    cancelFn: function cancelFn() {
+      this.showModalCreadeBook = false;
+      this.onChange();
     }
   }
 });
@@ -2062,15 +2078,7 @@ __webpack_require__.r(__webpack_exports__);
       },
       showModalDeleteBook: false,
       showModalCreadeBook: false,
-      createBookData: {
-        'writer': '',
-        'title': '',
-        'genre': '',
-        'pages': '',
-        'year': '',
-        'price': '',
-        'isbn': ''
-      },
+      createBookData: {},
       have_done: 0
     };
   },
@@ -2191,9 +2199,7 @@ __webpack_require__.r(__webpack_exports__);
         allBooksData: '/api-all-books/'
       },
       createData: {},
-      value: '',
-      v1: 0,
-      v2: 0
+      selectedBookId: null
     };
   },
   mounted: function mounted() {
@@ -2204,6 +2210,7 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
 
       this.is_refresh = true;
+      this.selectedBookId = null;
       axios.get(this.url.allBooksData + this.skipInApi + '/' + this.takeInApi).then(function (response) {
         _this.dataAll = response.data;
         _this.is_refresh = false; // console.dir(this.dataAll);
@@ -2214,6 +2221,10 @@ __webpack_require__.r(__webpack_exports__);
     onStep1Update: function onStep1Update() {
       // console.log('cool');
       this.update();
+    },
+    selectedBook: function selectedBook(id) {
+      // console.log(id);
+      this.selectedBookId = id;
     }
   }
 });
@@ -37581,7 +37592,7 @@ var render = function() {
                               _c(
                                 "label",
                                 { attrs: { for: "exampleFormControlSelect1" } },
-                                [_vm._v("Выберите писателя")]
+                                [_vm._v("Писатель")]
                               ),
                               _vm._v(" "),
                               _c(
@@ -37620,7 +37631,8 @@ var render = function() {
                                   id: "exampleFormControlInput1",
                                   name: "title",
                                   required: ""
-                                }
+                                },
+                                domProps: { value: _vm.bookDataArr.title }
                               })
                             ]),
                             _vm._v(" "),
@@ -37673,7 +37685,8 @@ var render = function() {
                                       min: "1",
                                       name: "pages",
                                       required: ""
-                                    }
+                                    },
+                                    domProps: { value: _vm.bookDataArr.pages }
                                   })
                                 ])
                               ]),
@@ -37698,7 +37711,8 @@ var render = function() {
                                       min: "1",
                                       name: "year",
                                       required: ""
-                                    }
+                                    },
+                                    domProps: { value: _vm.bookDataArr.year }
                                   })
                                 ])
                               ]),
@@ -37723,7 +37737,8 @@ var render = function() {
                                       min: "0",
                                       name: "price",
                                       required: ""
-                                    }
+                                    },
+                                    domProps: { value: _vm.bookDataArr.price }
                                   })
                                 ])
                               ])
@@ -37744,7 +37759,8 @@ var render = function() {
                                   id: "exampleFormControlInput5",
                                   name: "isbn",
                                   required: ""
-                                }
+                                },
+                                domProps: { value: _vm.bookDataArr.isbn }
                               })
                             ]),
                             _vm._v(" "),
@@ -37754,7 +37770,7 @@ var render = function() {
                                 staticClass: "btn btn-primary",
                                 attrs: { type: "submit" }
                               },
-                              [_vm._v("Добавить")]
+                              [_vm._v("Изменить")]
                             ),
                             _vm._v(" "),
                             _c(
@@ -37763,7 +37779,22 @@ var render = function() {
                                 staticClass: "btn btn-primary",
                                 on: {
                                   click: function($event) {
-                                    _vm.showModalCreadeBook = false
+                                    $event.preventDefault()
+                                    return _vm.deleteBookFunc($event)
+                                  }
+                                }
+                              },
+                              [_vm._v("Удалить")]
+                            ),
+                            _vm._v(" "),
+                            _c(
+                              "button",
+                              {
+                                staticClass: "btn btn-primary",
+                                on: {
+                                  click: function($event) {
+                                    $event.preventDefault()
+                                    return _vm.cancelFn($event)
                                   }
                                 }
                               },
@@ -37780,21 +37811,7 @@ var render = function() {
             ])
           ])
         ])
-      : _vm._e(),
-    _vm._v(" "),
-    _c(
-      "button",
-      {
-        staticClass: "btn btn-primary",
-        attrs: { type: "button" },
-        on: {
-          click: function($event) {
-            _vm.showModalCreadeBook = true
-          }
-        }
-      },
-      [_vm._v("Add book")]
-    )
+      : _vm._e()
   ])
 }
 var staticRenderFns = [
@@ -37804,7 +37821,7 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("header", { staticClass: "conf-step__header" }, [
       _c("h2", { staticClass: "conf-step__title" }, [
-        _vm._v("Добавление книги")
+        _vm._v("Изменить/Удалить книгу")
       ])
     ])
   }
@@ -38037,6 +38054,7 @@ var render = function() {
                                 staticClass: "btn btn-primary",
                                 on: {
                                   click: function($event) {
+                                    $event.preventDefault()
                                     _vm.showModalCreadeBook = false
                                   }
                                 }
@@ -38121,25 +38139,35 @@ var render = function() {
             _c(
               "tbody",
               _vm._l(_vm.dataAll, function(book) {
-                return _c("tr", [
-                  _c("th", { attrs: { scope: "row" } }, [
-                    _vm._v(_vm._s(book.id))
-                  ]),
-                  _vm._v(" "),
-                  _c("td", [_vm._v(_vm._s(book.name))]),
-                  _vm._v(" "),
-                  _c("td", [_vm._v(_vm._s(book.title))]),
-                  _vm._v(" "),
-                  _c("td", [_vm._v(_vm._s(book.genre))]),
-                  _vm._v(" "),
-                  _c("td", [_vm._v(_vm._s(book.pages))]),
-                  _vm._v(" "),
-                  _c("td", [_vm._v(_vm._s(book.year))]),
-                  _vm._v(" "),
-                  _c("td", [_vm._v(_vm._s(book.price))]),
-                  _vm._v(" "),
-                  _c("td", [_vm._v(_vm._s(book.isbn))])
-                ])
+                return _c(
+                  "tr",
+                  {
+                    on: {
+                      click: function($event) {
+                        return _vm.selectedBook(book.id)
+                      }
+                    }
+                  },
+                  [
+                    _c("th", { attrs: { scope: "row" } }, [
+                      _vm._v(_vm._s(book.id))
+                    ]),
+                    _vm._v(" "),
+                    _c("td", [_vm._v(_vm._s(book.name))]),
+                    _vm._v(" "),
+                    _c("td", [_vm._v(_vm._s(book.title))]),
+                    _vm._v(" "),
+                    _c("td", [_vm._v(_vm._s(book.genre))]),
+                    _vm._v(" "),
+                    _c("td", [_vm._v(_vm._s(book.pages))]),
+                    _vm._v(" "),
+                    _c("td", [_vm._v(_vm._s(book.year))]),
+                    _vm._v(" "),
+                    _c("td", [_vm._v(_vm._s(book.price))]),
+                    _vm._v(" "),
+                    _c("td", [_vm._v(_vm._s(book.isbn))])
+                  ]
+                )
               }),
               0
             )
@@ -38149,7 +38177,12 @@ var render = function() {
       _vm._v(" "),
       _c("main-books-add-component", { on: { update: _vm.onStep1Update } }),
       _vm._v(" "),
-      _c("main-book-edit-delete-component", { on: { update: _vm.update } })
+      _vm.selectedBookId
+        ? _c("main-book-edit-delete-component", {
+            attrs: { book_id: _vm.selectedBookId },
+            on: { update: _vm.update }
+          })
+        : _vm._e()
     ],
     1
   )

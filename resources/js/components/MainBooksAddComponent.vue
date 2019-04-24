@@ -64,7 +64,7 @@
 
                                         <!--<button class="btn btn-primary" @click.prevent="createBook">Добавить</button>-->
                                         <button class="btn btn-primary" type="submit">Добавить</button>
-                                        <button class="btn btn-primary" @click="showModalCreadeBook=false">Отмена</button>
+                                        <button class="btn btn-primary" @click.prevent="showModalCreadeBook=false">Отмена</button>
                                     </form>
 
                                 </div>
@@ -95,15 +95,7 @@
                 },
                 showModalDeleteBook: false,
                 showModalCreadeBook: false,
-                createBookData: {
-                    'writer': '',
-                    'title': '',
-                    'genre': '',
-                    'pages': '',
-                    'year': '',
-                    'price': '',
-                    'isbn': '',
-                },
+                createBookData: {},
                 have_done: 0,
             }
         },

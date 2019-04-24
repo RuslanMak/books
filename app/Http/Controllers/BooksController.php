@@ -65,7 +65,7 @@ class BooksController extends Controller
      */
     public function show($id)
     {
-        //
+        return Book::findOrFail($id);
     }
 
     /**
@@ -88,7 +88,15 @@ class BooksController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $book = Book::findOrFail($id);
+        $book->id_writer = $request->writer;
+        $book->title = $request->title;
+        $book->id_genre = $request->genre;
+        $book->pages = $request->pages;
+        $book->year = $request->year;
+        $book->price = $request->price;
+        $book->isbn = $request->isbn;
+        $book->save();
     }
 
     /**
@@ -99,6 +107,6 @@ class BooksController extends Controller
      */
     public function destroy($id)
     {
-        //
+        Book::findOrFail($id)->delete();
     }
 }

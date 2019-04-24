@@ -24,3 +24,6 @@ Route::get('/api-all-books/{skip}/{take}', 'BooksController@allBooks');
 Route::get('/api-all-writers', 'WritersController@allWriters');
 Route::get('/api-all-genres', 'GenresController@allGenres');
 Route::post('/api-save-book', 'BooksController@store');
+Route::get('/api-book/{id}', 'BooksController@show');
+Route::delete('/api-book-delete/{id}', 'BooksController@destroy');
+Route::post('/api-book-update/{id}', 'BooksController@update');

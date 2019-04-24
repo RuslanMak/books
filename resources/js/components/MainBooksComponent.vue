@@ -18,7 +18,7 @@
                 </thead>
 
                 <tbody>
-                    <tr v-for="book in dataAll">
+                    <tr v-for="book in dataAll"  v-on:click="selectedBook(book.id)">
                         <th scope="row">{{ book.id }}</th>
                         <td>{{ book.name }}</td>
                         <td>{{ book.title }}</td>
@@ -35,7 +35,7 @@
 
         <main-books-add-component @update="onStep1Update"></main-books-add-component>
         <!-- @update="update" -> при обновлении данных вызываем метод update-->
-        <main-book-edit-delete-component @update="update"></main-book-edit-delete-component>
+        <main-book-edit-delete-component v-if="selectedBookId" :book_id="selectedBookId" @update="update"></main-book-edit-delete-component>
 
     </div>
 </template>
@@ -56,9 +56,7 @@
                     allBooksData: '/api-all-books/',
                 },
                 createData: {},
-                value: '',
-                v1: 0,
-                v2: 0
+                selectedBookId: null,
             }
         },
 
@@ -69,6 +67,8 @@
         methods: {
             update: function () {
                 this.is_refresh = true;
+                this.selectedBookId = null;
+
                 axios.get(this.url.allBooksData + this.skipInApi + '/' + this.takeInApi)
                     .then((response) => {
                         this.dataAll = response.data;
@@ -84,6 +84,11 @@
                 // console.log('cool');
                 this.update();
             },
+
+            selectedBook: function (id) {
+                // console.log(id);
+                this.selectedBookId = id;
+            }
 
         }
     }
