@@ -47,7 +47,7 @@
         </div>
         <!-- END create book form -->
 
-        <button @click="showModalCreade = true" type="button" class="btn btn-primary">Add book</button>
+        <button @click="showModalCreade = true" type="button" class="btn btn-primary">Add writer</button>
 
     </div>
 </template>

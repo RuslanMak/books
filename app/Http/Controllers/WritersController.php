@@ -107,18 +107,10 @@ class WritersController extends Controller
      */
     public function filter(Request $request, $skip, $take)
     {
-        if (!isset($request->pages_max)) {
-            $request->pages_max = 999999999;
-        }
-//            dd($request->pages_max);
-//        ->select('writers.id', 'writers.name', 'writers.birthday', 'writers.id_genres')
-
         return DB::table('writers')
             ->join('genres', 'writers.id_genres', '=', 'genres.id')
-//            ->select('books.id', 'books.title', 'books.pages', 'books.year', 'books.price', 'books.isbn', 'writers.name', 'genres.genre')
             ->select('writers.id', 'writers.name', 'writers.birthday', 'writers.id_genres', 'genres.genre')
             ->where('writers.name', 'LIKE', '%'. $request->name .'%')
-//            ->where('writers.birthday', '=', ''.$request->birthday)
             ->where('writers.birthday', 'LIKE', '%'. $request->birthday .'%')
 //            ->where('writers.id_genres', 'LIKE', '%'. $request->id_genres .'%')
             ->where('genres.genre', 'LIKE', '%'. $request->id_genres .'%')

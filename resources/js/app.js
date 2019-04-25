@@ -27,6 +27,9 @@ Vue.component('main-book-edit-delete-component', require('./components/MainBookE
 Vue.component('main-writers-component', require('./components/MainWritersComponent.vue').default);
 Vue.component('main-writer-add-component', require('./components/MainWriterAddComponent.vue').default);
 Vue.component('main-writer-edit-delete-component', require('./components/MainWriterEditDeleteComponent.vue').default);
+Vue.component('main-genres-component', require('./components/MainGenresComponent.vue').default);
+Vue.component('main-genre-add-component', require('./components/MainGenreAddComponent.vue').default);
+Vue.component('main-genre-edit-delete-component', require('./components/MainGengeEditDeleteComponent.vue').default);
 
 
 const app = new Vue({

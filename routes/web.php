@@ -37,3 +37,11 @@ Route::get('/api-writer/{id}', 'WritersController@show');
 Route::post('/api-writer-update/{id}', 'WritersController@update');
 Route::delete('/api-writer-delete/{id}', 'WritersController@destroy');
 Route::get('/api-filtered-writers/{skip}/{take}/', 'WritersController@filter');
+
+Route::get('/genres', 'GenresController@index');
+Route::get('/api-all-genres/{skip}/{take}', 'GenresController@allPaginated');
+Route::get('/api-filtered-genres/{skip}/{take}/', 'GenresController@filter');
+Route::post('/api-save-genres', 'GenresController@store');
+Route::get('/api-genre/{id}', 'GenresController@show');
+Route::post('/api-genre-update/{id}', 'GenresController@update');
+Route::delete('/api-genre-delete/{id}', 'GenresController@destroy');

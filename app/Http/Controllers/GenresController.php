@@ -21,17 +21,22 @@ class GenresController extends Controller
      */
     public function index()
     {
-        //
+        $totalGenres =  DB::table('genres')->count();
+
+        return view('genres')
+            ->with('totalGenres', $totalGenres);
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
+     * Paginated
      */
-    public function create()
+    public function allPaginated($skip, $take)
     {
-        //
+
+        return DB::table('genres')
+            ->select('genres.id', 'genres.genre')
+            ->skip($skip)->take($take)
+            ->get();
     }
 
     /**
@@ -42,7 +47,9 @@ class GenresController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $genre = new Genre();
+        $genre->genre = $request->genre;
+        $genre->save();
     }
 
     /**
@@ -53,19 +60,9 @@ class GenresController extends Controller
      */
     public function show($id)
     {
-        //
+        return Genre::findOrFail($id);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
 
     /**
      * Update the specified resource in storage.
@@ -76,7 +73,9 @@ class GenresController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $genreNew = Genre::findOrFail($id);
+        $genreNew->genre = $request->genre;
+        $genreNew->save();
     }
 
     /**
@@ -87,6 +86,18 @@ class GenresController extends Controller
      */
     public function destroy($id)
     {
-        //
+        Genre::findOrFail($id)->delete();
+    }
+
+    /**
+     * FIlter
+     */
+    public function filter(Request $request, $skip, $take)
+    {
+        return DB::table('genres')
+            ->select('genres.id', 'genres.genre')
+            ->where('genres.genre', 'LIKE', '%'. $request->genre .'%')
+            ->skip($skip)->take($take)
+            ->get();
     }
 }
