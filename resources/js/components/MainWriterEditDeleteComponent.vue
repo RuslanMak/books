@@ -36,7 +36,7 @@
 
                                         <!--<span>Выбрано: {{ selected }}</span>-->
                                         <button class="btn btn-primary" type="submit">Изменить</button>
-                                        <button class="btn btn-primary" @click.prevent="deleteBookFunc">Удалить</button>
+                                        <button class="btn btn-primary" @click.prevent="deleteWriterFunc">Удалить</button>
                                         <button class="btn btn-primary" @click.prevent="cancelFn">Отмена</button>
                                     </form>
 
@@ -67,7 +67,7 @@
                     writerData: '/api-writer/',
                     allGenresData: '/api-all-genres',
                     saveBook: '/api-save-book',
-                    deleteBook: '/api-book-delete/',
+                    deleteWriter: '/api-writer-delete/',
                     updateWriter: '/api-writer-update/',
                 },
                 showModalCreade: false,
@@ -138,8 +138,8 @@
                 this.$emit('update')
             },
 
-            deleteBookFunc: function () {
-                axios.delete(this.url.deleteBook + this.writer_id)
+            deleteWriterFunc: function () {
+                axios.delete(this.url.deleteWriter + this.writer_id)
                     .then(response => {
                         console.log(response);
                     })

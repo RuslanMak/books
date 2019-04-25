@@ -29,7 +29,7 @@
 
                                         <div class="form-group">
                                             <label for="exampleFormControlSelect2">Тематика</label>
-                                            <select multiple class="form-control" id="exampleFormControlSelect2" name="genre" ref="genre">
+                                            <select multiple class="form-control" id="exampleFormControlSelect2" name="genre" v-model="selected">
                                                 <option v-for="genreData in genresAll" :value="genreData.id">{{ genreData.genre }}</option>
                                             </select>
                                         </div>
@@ -66,6 +66,7 @@
                 showModalCreade: false,
                 createWriterData: {},
                 have_done: 0,
+                selected: [1]
             }
         },
 
@@ -96,11 +97,7 @@
                 event.preventDefault();
                 // console.dir(this.$refs.genre.length);
 
-                let genres = '';
-                for (let i = 0; i < this.$refs.genre.length; i++) {
-                    genres += this.$refs.genre[i].value + ',';
-                }
-                genres = genres.substring(0, genres.length - 1);
+                let genres = this.selected.join();
                 // console.log(genres);
 
                 this.createWriterData.name = this.$refs.name.value;

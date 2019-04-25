@@ -35,3 +35,5 @@ Route::get('/writers', 'WritersController@index');
 Route::post('/api-save-writer', 'WritersController@store');
 Route::get('/api-writer/{id}', 'WritersController@show');
 Route::post('/api-writer-update/{id}', 'WritersController@update');
+Route::delete('/api-writer-delete/{id}', 'WritersController@destroy');
+Route::get('/api-filtered-writers/{skip}/{take}/', 'WritersController@filter');

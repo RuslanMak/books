@@ -44,7 +44,7 @@
                         <th scope="row">{{ writer.id }}</th>
                         <td>{{ writer.name }}</td>
                         <td>{{ writer.birthday }}</td>
-                        <td>{{ writer.id_genres }}</td>
+                        <td>{{ genresFun(writer.id_genres) }}</td>
                     </tr>
                 </tbody>
             </table>
@@ -68,11 +68,13 @@
             return {
                 is_refresh: false,
                 dataAll: [],
+                genresAll: [],
                 skipInApi: 0,
                 takeInApi: 10,
                 url: {
+                    allGenresData: '/api-all-genres',
                     allWritersData: '/api-all-writers/',
-                    filteredWritersData: '/api-filtered-books/',
+                    filteredWritersData: '/api-filtered-writers/',
                 },
                 createData: {},
                 selectedWriterId: null,
@@ -112,6 +114,15 @@
                     .catch(error => {
                         console.log(error.response)
                     });
+
+                axios.get(this.url.allGenresData)
+                    .then((response) => {
+                        this.genresAll = response.data;
+                        console.dir(this.genresAll);
+                    })
+                    .catch(error => {
+                        console.log(error.response)
+                    });
             },
 
             onStep1Update() {
@@ -139,15 +150,15 @@
 
                 console.log(getForFilter);
 
-                // axios.get(this.url.filteredWritersData + this.skipInApi + '/' + this.takeInApi + '/' + getForFilter)
-                //     .then((response) => {
-                //         this.dataAll = response.data;
-                //         this.is_refresh = false;
-                //         console.dir(this.dataAll);
-                //     })
-                //     .catch(error => {
-                //         console.log(error.response)
-                //     });
+                axios.get(this.url.filteredWritersData + this.skipInApi + '/' + this.takeInApi + '/' + getForFilter)
+                    .then((response) => {
+                        this.dataAll = response.data;
+                        this.is_refresh = false;
+                        // console.dir(this.dataAll);
+                    })
+                    .catch(error => {
+                        console.log(error.response)
+                    });
             },
 
             nextPage(){
@@ -169,6 +180,21 @@
                 this.pageNumber = 1;
                 this.skipInApi = 0;
                 this.update();
+            },
+
+            genresFun: function (ids) {
+                let idsArr = ids.split(',');
+                let nameArr = [];
+
+                idsArr.forEach(date => {
+                    let genres = this.genresAll.filter(x => x["id"] == date);
+
+                    if(genres[0]) {
+                        nameArr.push(genres[0].genre);
+                    }
+                });
+
+                return nameArr.join(', ');
             }
 
         },

@@ -2436,7 +2436,8 @@ __webpack_require__.r(__webpack_exports__);
       },
       showModalCreade: false,
       createWriterData: {},
-      have_done: 0
+      have_done: 0,
+      selected: [1]
     };
   },
   mounted: function mounted() {
@@ -2462,13 +2463,7 @@ __webpack_require__.r(__webpack_exports__);
 
       event.preventDefault(); // console.dir(this.$refs.genre.length);
 
-      var genres = '';
-
-      for (var i = 0; i < this.$refs.genre.length; i++) {
-        genres += this.$refs.genre[i].value + ',';
-      }
-
-      genres = genres.substring(0, genres.length - 1); // console.log(genres);
+      var genres = this.selected.join(); // console.log(genres);
 
       this.createWriterData.name = this.$refs.name.value;
       this.createWriterData.birthday = this.$refs.birthday.value;
@@ -2568,7 +2563,7 @@ __webpack_require__.r(__webpack_exports__);
         writerData: '/api-writer/',
         allGenresData: '/api-all-genres',
         saveBook: '/api-save-book',
-        deleteBook: '/api-book-delete/',
+        deleteWriter: '/api-writer-delete/',
         updateWriter: '/api-writer-update/'
       },
       showModalCreade: false,
@@ -2625,8 +2620,8 @@ __webpack_require__.r(__webpack_exports__);
     onChange: function onChange() {
       this.$emit('update');
     },
-    deleteBookFunc: function deleteBookFunc() {
-      axios["delete"](this.url.deleteBook + this.writer_id).then(function (response) {
+    deleteWriterFunc: function deleteWriterFunc() {
+      axios["delete"](this.url.deleteWriter + this.writer_id).then(function (response) {
         console.log(response);
       })["catch"](function (error) {
         console.log(error.response);
@@ -2719,11 +2714,13 @@ __webpack_require__.r(__webpack_exports__);
     return {
       is_refresh: false,
       dataAll: [],
+      genresAll: [],
       skipInApi: 0,
       takeInApi: 10,
       url: {
+        allGenresData: '/api-all-genres',
         allWritersData: '/api-all-writers/',
-        filteredWritersData: '/api-filtered-books/'
+        filteredWritersData: '/api-filtered-writers/'
       },
       createData: {},
       selectedWriterId: null,
@@ -2759,6 +2756,12 @@ __webpack_require__.r(__webpack_exports__);
       })["catch"](function (error) {
         console.log(error.response);
       });
+      axios.get(this.url.allGenresData).then(function (response) {
+        _this.genresAll = response.data;
+        console.dir(_this.genresAll);
+      })["catch"](function (error) {
+        console.log(error.response);
+      });
     },
     onStep1Update: function onStep1Update() {
       // console.log('cool');
@@ -2769,6 +2772,8 @@ __webpack_require__.r(__webpack_exports__);
       this.selectedWriterId = id;
     },
     findFun: function findFun() {
+      var _this2 = this;
+
       //сборка get запроса
       var getForFilter = '?';
 
@@ -2784,15 +2789,13 @@ __webpack_require__.r(__webpack_exports__);
         getForFilter += '&id_genres=' + this.filter.id_genres;
       }
 
-      console.log(getForFilter); // axios.get(this.url.filteredWritersData + this.skipInApi + '/' + this.takeInApi + '/' + getForFilter)
-      //     .then((response) => {
-      //         this.dataAll = response.data;
-      //         this.is_refresh = false;
-      //         console.dir(this.dataAll);
-      //     })
-      //     .catch(error => {
-      //         console.log(error.response)
-      //     });
+      console.log(getForFilter);
+      axios.get(this.url.filteredWritersData + this.skipInApi + '/' + this.takeInApi + '/' + getForFilter).then(function (response) {
+        _this2.dataAll = response.data;
+        _this2.is_refresh = false; // console.dir(this.dataAll);
+      })["catch"](function (error) {
+        console.log(error.response);
+      });
     },
     nextPage: function nextPage() {
       this.pageNumber++;
@@ -2811,6 +2814,22 @@ __webpack_require__.r(__webpack_exports__);
       this.pageNumber = 1;
       this.skipInApi = 0;
       this.update();
+    },
+    genresFun: function genresFun(ids) {
+      var _this3 = this;
+
+      var idsArr = ids.split(',');
+      var nameArr = [];
+      idsArr.forEach(function (date) {
+        var genres = _this3.genresAll.filter(function (x) {
+          return x["id"] == date;
+        });
+
+        if (genres[0]) {
+          nameArr.push(genres[0].genre);
+        }
+      });
+      return nameArr.join(', ');
     }
   },
   computed: {
@@ -38515,7 +38534,7 @@ var render = function() {
                               _c(
                                 "label",
                                 { attrs: { for: "exampleFormControlSelect2" } },
-                                [_vm._v("Тема")]
+                                [_vm._v("Тематика")]
                               ),
                               _vm._v(" "),
                               _c(
@@ -39262,12 +39281,37 @@ var render = function() {
                               _c(
                                 "select",
                                 {
-                                  ref: "genre",
+                                  directives: [
+                                    {
+                                      name: "model",
+                                      rawName: "v-model",
+                                      value: _vm.selected,
+                                      expression: "selected"
+                                    }
+                                  ],
                                   staticClass: "form-control",
                                   attrs: {
                                     multiple: "",
                                     id: "exampleFormControlSelect2",
                                     name: "genre"
+                                  },
+                                  on: {
+                                    change: function($event) {
+                                      var $$selectedVal = Array.prototype.filter
+                                        .call($event.target.options, function(
+                                          o
+                                        ) {
+                                          return o.selected
+                                        })
+                                        .map(function(o) {
+                                          var val =
+                                            "_value" in o ? o._value : o.value
+                                          return val
+                                        })
+                                      _vm.selected = $event.target.multiple
+                                        ? $$selectedVal
+                                        : $$selectedVal[0]
+                                    }
                                   }
                                 },
                                 _vm._l(_vm.genresAll, function(genreData) {
@@ -39497,7 +39541,7 @@ var render = function() {
                                 on: {
                                   click: function($event) {
                                     $event.preventDefault()
-                                    return _vm.deleteBookFunc($event)
+                                    return _vm.deleteWriterFunc($event)
                                   }
                                 }
                               },
@@ -39832,7 +39876,9 @@ var render = function() {
                       _vm._v(" "),
                       _c("td", [_vm._v(_vm._s(writer.birthday))]),
                       _vm._v(" "),
-                      _c("td", [_vm._v(_vm._s(writer.id_genres))])
+                      _c("td", [
+                        _vm._v(_vm._s(_vm.genresFun(writer.id_genres)))
+                      ])
                     ]
                   )
                 })

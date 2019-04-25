@@ -28,7 +28,7 @@
                                             <input type="text" class="form-control" id="exampleFormControlInput1" name="title" ref="title" required>
                                         </div>
                                         <div class="form-group">
-                                            <label for="exampleFormControlSelect2">Тема</label>
+                                            <label for="exampleFormControlSelect2">Тематика</label>
                                             <select class="form-control" id="exampleFormControlSelect2" name="genre" ref="genre">
                                                 <option v-for="genreData in genresAll" :value="genreData.id">{{ genreData.genre }}</option>
                                             </select>
