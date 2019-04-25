@@ -2198,6 +2198,26 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: [//get data from Blade
   'totalItems'],
@@ -2206,7 +2226,7 @@ __webpack_require__.r(__webpack_exports__);
       is_refresh: false,
       dataAll: [],
       skipInApi: 0,
-      takeInApi: 100,
+      takeInApi: 3,
       url: {
         allBooksData: '/api-all-books/',
         filteredBooksData: '/api-filtered-books/'
@@ -2222,8 +2242,16 @@ __webpack_require__.r(__webpack_exports__);
         'year': '',
         'price': '',
         'isbn': ''
-      }
+      },
+      pageNumber: 1,
+      maxPages: 0
     };
+  },
+  watch: {
+    takeInApi: function takeInApi() {
+      this.update();
+      this.cleanFilterObj();
+    }
   },
   mounted: function mounted() {
     this.update();
@@ -2294,6 +2322,39 @@ __webpack_require__.r(__webpack_exports__);
       })["catch"](function (error) {
         console.log(error.response);
       });
+    },
+    nextPage: function nextPage() {
+      this.pageNumber++;
+      this.skipInApi += this.takeInApi;
+      this.update();
+    },
+    prevPage: function prevPage() {
+      this.pageNumber--;
+      this.skipInApi -= this.takeInApi;
+      this.update();
+    },
+    cleanFilterObj: function cleanFilterObj() {
+      this.filter.name = '';
+      this.filter.title = '';
+      this.filter.genre = '';
+      this.filter.pages_min = '';
+      this.filter.pages_max = '';
+      this.filter.year = '';
+      this.filter.price = '';
+      this.filter.isbn = '';
+      this.pageNumber = 1;
+      this.skipInApi = 0;
+      this.update();
+    }
+  },
+  computed: {
+    pageCount: function pageCount() {
+      var l = this.totalItems,
+          s = this.takeInApi; // console.log(l);
+
+      this.maxPages = Math.ceil(l / s); // console.log(this.maxPages);
+
+      return this.maxPages;
     }
   }
 });
@@ -38196,6 +38257,147 @@ var render = function() {
     { staticClass: "container" },
     [
       _c("div", { staticClass: "row justify-content-center" }, [
+        _c("h2", [
+          _vm._v("Общая сума книг на сайте: " + _vm._s(_vm.totalItems))
+        ])
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "row justify-content-center" }, [
+        _c("h3", [_vm._v("Выбирете количество книжек на странице: ")]),
+        _vm._v(" "),
+        _c(
+          "button",
+          {
+            staticClass: "btn btn-secondary btn-lg",
+            attrs: { type: "button", disabled: "" }
+          },
+          [_vm._v(_vm._s(_vm.takeInApi))]
+        ),
+        _vm._v(" "),
+        _vm.takeInApi !== 2
+          ? _c(
+              "button",
+              {
+                staticClass: "btn btn-outline-dark",
+                attrs: { type: "button" },
+                on: {
+                  click: function($event) {
+                    _vm.takeInApi = 2
+                  }
+                }
+              },
+              [_vm._v("2")]
+            )
+          : _vm._e(),
+        _vm._v(" "),
+        _vm.takeInApi !== 10
+          ? _c(
+              "button",
+              {
+                staticClass: "btn btn-outline-dark",
+                attrs: { type: "button" },
+                on: {
+                  click: function($event) {
+                    _vm.takeInApi = 10
+                  }
+                }
+              },
+              [_vm._v("10")]
+            )
+          : _vm._e(),
+        _vm._v(" "),
+        _vm.takeInApi !== 20
+          ? _c(
+              "button",
+              {
+                staticClass: "btn btn-outline-dark",
+                attrs: { type: "button" },
+                on: {
+                  click: function($event) {
+                    _vm.takeInApi = 20
+                  }
+                }
+              },
+              [_vm._v("20")]
+            )
+          : _vm._e(),
+        _vm._v(" "),
+        _vm.takeInApi !== 50
+          ? _c(
+              "button",
+              {
+                staticClass: "btn btn-outline-dark",
+                attrs: { type: "button" },
+                on: {
+                  click: function($event) {
+                    _vm.takeInApi = 50
+                  }
+                }
+              },
+              [_vm._v("50")]
+            )
+          : _vm._e(),
+        _vm._v(" "),
+        _vm.takeInApi !== 100
+          ? _c(
+              "button",
+              {
+                staticClass: "btn btn-outline-dark",
+                attrs: { type: "button" },
+                on: {
+                  click: function($event) {
+                    _vm.takeInApi = 100
+                  }
+                }
+              },
+              [_vm._v("100")]
+            )
+          : _vm._e()
+      ]),
+      _vm._v(" "),
+      _c(
+        "div",
+        {
+          staticClass: "row justify-content-center",
+          staticStyle: { "margin-bottom": "15px" }
+        },
+        [
+          _vm.pageNumber !== 1
+            ? _c(
+                "button",
+                {
+                  staticClass: "btn btn-outline-dark",
+                  attrs: { type: "button" },
+                  on: { click: _vm.prevPage }
+                },
+                [_vm._v("<-prev")]
+              )
+            : _vm._e(),
+          _vm._v(" "),
+          _c(
+            "button",
+            {
+              staticClass: "btn btn-secondary btn-lg",
+              attrs: { type: "button", disabled: "" }
+            },
+            [_vm._v(_vm._s(_vm.pageNumber))]
+          ),
+          _vm._v(" "),
+          _vm.pageNumber <= _vm.pageCount - 1
+            ? _c(
+                "button",
+                {
+                  staticClass: "btn btn-outline-dark",
+                  attrs: { type: "button" },
+                  on: { click: _vm.nextPage }
+                },
+                [_vm._v("next->")]
+              )
+            : _vm._e()
+        ]
+      ),
+      _vm._v(" "),
+      _c("div", { staticClass: "row justify-content-center" }, [
         _c(
           "table",
           {
@@ -38209,7 +38411,18 @@ var render = function() {
               "tbody",
               [
                 _c("tr", [
-                  _c("th", { attrs: { scope: "row" } }, [_vm._v("Фильтр")]),
+                  _c("th", { attrs: { scope: "row" } }, [
+                    _vm._v("Фильтр "),
+                    _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-secondary btn-sm",
+                        attrs: { type: "button" },
+                        on: { click: _vm.cleanFilterObj }
+                      },
+                      [_vm._v("Clean")]
+                    )
+                  ]),
                   _vm._v(" "),
                   _c("td", [
                     _c("input", {
