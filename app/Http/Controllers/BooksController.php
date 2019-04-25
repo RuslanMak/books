@@ -109,4 +109,31 @@ class BooksController extends Controller
     {
         Book::findOrFail($id)->delete();
     }
+
+    /**
+     * FIlter
+     */
+    public function filteredBooks(Request $request, $skip, $take)
+    {
+        if (!isset($request->pages_max)) {
+            $request->pages_max = 999999999;
+        }
+//            dd($request->pages_max);
+
+        return DB::table('books')
+            ->join('writers', 'books.id_writer', '=', 'writers.id')
+            ->join('genres', 'books.id_genre', '=', 'genres.id')
+//            ->select('books.id', 'books.title', 'books.pages', 'books.year', 'books.price', 'books.isbn', 'writers.name', 'genres.genre')
+            ->select('books.id', 'books.title', 'books.pages', 'books.year', 'books.price', 'books.isbn', 'books.id_writer', 'books.id_genre', 'writers.name', 'genres.genre')
+            ->where('books.title', 'LIKE', '%'. $request->title .'%')
+            ->where('books.pages', '>=', ''.$request->pages_min)
+            ->where('books.pages', '<=', ''.$request->pages_max)
+            ->where('books.year', 'LIKE', '%'. $request->year .'%')
+            ->where('books.price', 'LIKE', '%'. $request->price .'%')
+            ->where('books.isbn', 'LIKE', '%'. $request->isbn .'%')
+            ->where('writers.name', 'LIKE', '%'. $request->name .'%')
+            ->where('genres.genre', 'LIKE', '%'. $request->genre .'%')
+            ->skip($skip)->take($take)
+            ->get();
+    }
 }

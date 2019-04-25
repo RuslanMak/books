@@ -27,3 +27,5 @@ Route::post('/api-save-book', 'BooksController@store');
 Route::get('/api-book/{id}', 'BooksController@show');
 Route::delete('/api-book-delete/{id}', 'BooksController@destroy');
 Route::post('/api-book-update/{id}', 'BooksController@update');
+
+Route::get('/api-filtered-books/{skip}/{take}/', 'BooksController@filteredBooks');

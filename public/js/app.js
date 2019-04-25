@@ -1913,8 +1913,7 @@ __webpack_require__.r(__webpack_exports__);
       var _this = this;
 
       axios.get(this.url.bookData + this.book_id).then(function (response) {
-        _this.bookDataArr = response.data;
-        console.dir(_this.bookDataArr);
+        _this.bookDataArr = response.data; // console.dir(this.bookDataArr);
       })["catch"](function (error) {
         console.log(error.response);
       });
@@ -2186,6 +2185,19 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: [//get data from Blade
   'totalItems'],
@@ -2196,10 +2208,21 @@ __webpack_require__.r(__webpack_exports__);
       skipInApi: 0,
       takeInApi: 100,
       url: {
-        allBooksData: '/api-all-books/'
+        allBooksData: '/api-all-books/',
+        filteredBooksData: '/api-filtered-books/'
       },
       createData: {},
-      selectedBookId: null
+      selectedBookId: null,
+      filter: {
+        'name': '',
+        'title': '',
+        'genre': '',
+        'pages_min': '',
+        'pages_max': '',
+        'year': '',
+        'price': '',
+        'isbn': ''
+      }
     };
   },
   mounted: function mounted() {
@@ -2225,6 +2248,52 @@ __webpack_require__.r(__webpack_exports__);
     selectedBook: function selectedBook(id) {
       // console.log(id);
       this.selectedBookId = id;
+    },
+    findFun: function findFun() {
+      var _this2 = this;
+
+      //сборка get запроса
+      var getForFilter = '?';
+
+      if (this.filter.name !== '') {
+        getForFilter += '&name=' + this.filter.name;
+      }
+
+      if (this.filter.title !== '') {
+        getForFilter += '&title=' + this.filter.title;
+      }
+
+      if (this.filter.genre !== '') {
+        getForFilter += '&genre=' + this.filter.genre;
+      }
+
+      if (this.filter.pages_min !== '') {
+        getForFilter += '&pages_min=' + this.filter.pages_min;
+      }
+
+      if (this.filter.pages_max !== '') {
+        getForFilter += '&pages_max=' + this.filter.pages_max;
+      }
+
+      if (this.filter.year !== '') {
+        getForFilter += '&year=' + this.filter.year;
+      }
+
+      if (this.filter.price !== '') {
+        getForFilter += '&price=' + this.filter.price;
+      }
+
+      if (this.filter.isbn !== '') {
+        getForFilter += '&isbn=' + this.filter.isbn;
+      } // console.log(getForFilter);
+
+
+      axios.get(this.url.filteredBooksData + this.skipInApi + '/' + this.takeInApi + '/' + getForFilter).then(function (response) {
+        _this2.dataAll = response.data;
+        _this2.is_refresh = false; // console.dir(this.dataAll);
+      })["catch"](function (error) {
+        console.log(error.response);
+      });
     }
   }
 });
@@ -38138,38 +38207,246 @@ var render = function() {
             _vm._v(" "),
             _c(
               "tbody",
-              _vm._l(_vm.dataAll, function(book) {
-                return _c(
-                  "tr",
-                  {
-                    on: {
-                      click: function($event) {
-                        return _vm.selectedBook(book.id)
+              [
+                _c("tr", [
+                  _c("th", { attrs: { scope: "row" } }, [_vm._v("Фильтр")]),
+                  _vm._v(" "),
+                  _c("td", [
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.filter.name,
+                          expression: "filter.name"
+                        }
+                      ],
+                      staticClass: "form-control",
+                      attrs: { type: "text" },
+                      domProps: { value: _vm.filter.name },
+                      on: {
+                        change: _vm.findFun,
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(_vm.filter, "name", $event.target.value)
+                        }
                       }
-                    }
-                  },
-                  [
-                    _c("th", { attrs: { scope: "row" } }, [
-                      _vm._v(_vm._s(book.id))
-                    ]),
+                    })
+                  ]),
+                  _vm._v(" "),
+                  _c("td", [
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.filter.title,
+                          expression: "filter.title"
+                        }
+                      ],
+                      staticClass: "form-control",
+                      attrs: { type: "text" },
+                      domProps: { value: _vm.filter.title },
+                      on: {
+                        change: _vm.findFun,
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(_vm.filter, "title", $event.target.value)
+                        }
+                      }
+                    })
+                  ]),
+                  _vm._v(" "),
+                  _c("td", [
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.filter.genre,
+                          expression: "filter.genre"
+                        }
+                      ],
+                      staticClass: "form-control",
+                      attrs: { type: "text" },
+                      domProps: { value: _vm.filter.genre },
+                      on: {
+                        change: _vm.findFun,
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(_vm.filter, "genre", $event.target.value)
+                        }
+                      }
+                    })
+                  ]),
+                  _vm._v(" "),
+                  _c("td", [
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.filter.pages_min,
+                          expression: "filter.pages_min"
+                        }
+                      ],
+                      staticClass: "form-control",
+                      attrs: { type: "text", placeholder: "min" },
+                      domProps: { value: _vm.filter.pages_min },
+                      on: {
+                        change: _vm.findFun,
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(_vm.filter, "pages_min", $event.target.value)
+                        }
+                      }
+                    }),
                     _vm._v(" "),
-                    _c("td", [_vm._v(_vm._s(book.name))]),
-                    _vm._v(" "),
-                    _c("td", [_vm._v(_vm._s(book.title))]),
-                    _vm._v(" "),
-                    _c("td", [_vm._v(_vm._s(book.genre))]),
-                    _vm._v(" "),
-                    _c("td", [_vm._v(_vm._s(book.pages))]),
-                    _vm._v(" "),
-                    _c("td", [_vm._v(_vm._s(book.year))]),
-                    _vm._v(" "),
-                    _c("td", [_vm._v(_vm._s(book.price))]),
-                    _vm._v(" "),
-                    _c("td", [_vm._v(_vm._s(book.isbn))])
-                  ]
-                )
-              }),
-              0
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.filter.pages_max,
+                          expression: "filter.pages_max"
+                        }
+                      ],
+                      staticClass: "form-control",
+                      attrs: {
+                        type: "text",
+                        name: "pages",
+                        placeholder: "max"
+                      },
+                      domProps: { value: _vm.filter.pages_max },
+                      on: {
+                        change: _vm.findFun,
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(_vm.filter, "pages_max", $event.target.value)
+                        }
+                      }
+                    })
+                  ]),
+                  _vm._v(" "),
+                  _c("td", [
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.filter.year,
+                          expression: "filter.year"
+                        }
+                      ],
+                      staticClass: "form-control",
+                      attrs: { type: "text" },
+                      domProps: { value: _vm.filter.year },
+                      on: {
+                        change: _vm.findFun,
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(_vm.filter, "year", $event.target.value)
+                        }
+                      }
+                    })
+                  ]),
+                  _vm._v(" "),
+                  _c("td", [
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.filter.price,
+                          expression: "filter.price"
+                        }
+                      ],
+                      staticClass: "form-control",
+                      attrs: { type: "text" },
+                      domProps: { value: _vm.filter.price },
+                      on: {
+                        change: _vm.findFun,
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(_vm.filter, "price", $event.target.value)
+                        }
+                      }
+                    })
+                  ]),
+                  _vm._v(" "),
+                  _c("td", [
+                    _c("input", {
+                      directives: [
+                        {
+                          name: "model",
+                          rawName: "v-model",
+                          value: _vm.filter.isbn,
+                          expression: "filter.isbn"
+                        }
+                      ],
+                      staticClass: "form-control",
+                      attrs: { type: "text" },
+                      domProps: { value: _vm.filter.isbn },
+                      on: {
+                        change: _vm.findFun,
+                        input: function($event) {
+                          if ($event.target.composing) {
+                            return
+                          }
+                          _vm.$set(_vm.filter, "isbn", $event.target.value)
+                        }
+                      }
+                    })
+                  ])
+                ]),
+                _vm._v(" "),
+                _vm._l(_vm.dataAll, function(book) {
+                  return _c(
+                    "tr",
+                    {
+                      on: {
+                        click: function($event) {
+                          return _vm.selectedBook(book.id)
+                        }
+                      }
+                    },
+                    [
+                      _c("th", { attrs: { scope: "row" } }, [
+                        _vm._v(_vm._s(book.id))
+                      ]),
+                      _vm._v(" "),
+                      _c("td", [_vm._v(_vm._s(book.name))]),
+                      _vm._v(" "),
+                      _c("td", [_vm._v(_vm._s(book.title))]),
+                      _vm._v(" "),
+                      _c("td", [_vm._v(_vm._s(book.genre))]),
+                      _vm._v(" "),
+                      _c("td", [_vm._v(_vm._s(book.pages))]),
+                      _vm._v(" "),
+                      _c("td", [_vm._v(_vm._s(book.year))]),
+                      _vm._v(" "),
+                      _c("td", [_vm._v(_vm._s(book.price))]),
+                      _vm._v(" "),
+                      _c("td", [_vm._v(_vm._s(book.isbn))])
+                    ]
+                  )
+                })
+              ],
+              2
             )
           ]
         )

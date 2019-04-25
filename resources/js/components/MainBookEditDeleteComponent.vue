@@ -120,7 +120,7 @@
                 axios.get(this.url.bookData + this.book_id)
                     .then((response) => {
                         this.bookDataArr = response.data;
-                        console.dir(this.bookDataArr);
+                        // console.dir(this.bookDataArr);
                     })
                     .catch(error => {
                         console.log(error.response)
