@@ -89,6 +89,7 @@
                     <a href="https://laracasts.com">Laracasts</a>
                     <a href="https://laravel-news.com">News</a>
                     <a href="/books">Books</a>
+                    <a href="/writers">Writers</a>
                 </div>
             </div>
         </div>

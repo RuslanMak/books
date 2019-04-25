@@ -27,12 +27,12 @@
                 <thead>
                     <tr>
                         <th scope="col">#</th>
-                        <th scope="col">Writer</th>
-                        <th scope="col">Title</th>
-                        <th scope="col">Genre</th>
-                        <th scope="col">Pages</th>
-                        <th scope="col">Year</th>
-                        <th scope="col">Price</th>
+                        <th scope="col">Автор</th>
+                        <th scope="col">Название</th>
+                        <th scope="col">Тема</th>
+                        <th scope="col">Кол-во страниц</th>
+                        <th scope="col">Год выпуска</th>
+                        <th scope="col">Стоимость</th>
                         <th scope="col">ISBN</th>
                     </tr>
                 </thead>
@@ -51,7 +51,7 @@
                         <td><input v-on:change="findFun" type="text" class="form-control" v-model="filter.price"></td>
                         <td><input v-on:change="findFun" type="text" class="form-control" v-model="filter.isbn"></td>
                     </tr>
-                    <tr v-for="book in dataAll"  v-on:click="selectedBook(book.id)">
+                    <tr v-for="book in dataAll"  v-on:click="selectedBook(book.id)" style="cursor: pointer;">
                         <th scope="row">{{ book.id }}</th>
                         <td>{{ book.name }}</td>
                         <td>{{ book.title }}</td>

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use DB;
 use App\Writer;
+use App\Genre;
 
 class WritersController extends Controller
 {
@@ -21,7 +22,19 @@ class WritersController extends Controller
      */
     public function index()
     {
-        //
+        $totalWriters =  DB::table('writers')->count();
+
+        return view('writers')
+            ->with('totalWriters', $totalWriters);
+    }
+
+    public function allWritersPaginated($skip, $take)
+    {
+
+        return DB::table('writers')
+            ->select('writers.id', 'writers.name', 'writers.birthday', 'writers.id_genres')
+            ->skip($skip)->take($take)
+            ->get();
     }
 
     /**
@@ -42,7 +55,13 @@ class WritersController extends Controller
      */
     public function store(Request $request)
     {
-        //
+//        dd($request->genre);
+
+        $writer = new Writer();
+        $writer->name = $request->name;
+        $writer->birthday = $request->birthday;
+        $writer->id_genres = $request->genre;
+        $writer->save();
     }
 
     /**
@@ -53,18 +72,7 @@ class WritersController extends Controller
      */
     public function show($id)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
+        return Writer::findOrFail($id);
     }
 
     /**
@@ -76,7 +84,11 @@ class WritersController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $writer = Writer::findOrFail($id);
+        $writer->name = $request->name;
+        $writer->birthday = $request->birthday;
+        $writer->id_genres = $request->genre;
+        $writer->save();
     }
 
     /**
