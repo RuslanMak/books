@@ -37,8 +37,9 @@ class Kernel extends HttpKernel
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
         ],
 
+//        делаю 100 запросов в секунду
         'api' => [
-            'throttle:60,1',
+            'throttle:6000,1',
             'bindings',
         ],
     ];

@@ -2217,7 +2217,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: [//get data from Blade
   'totalItems'],
@@ -2226,7 +2225,7 @@ __webpack_require__.r(__webpack_exports__);
       is_refresh: false,
       dataAll: [],
       skipInApi: 0,
-      takeInApi: 3,
+      takeInApi: 10,
       url: {
         allBooksData: '/api-all-books/',
         filteredBooksData: '/api-filtered-books/'
@@ -2587,7 +2586,6 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-//
 //
 //
 //
@@ -3029,7 +3027,6 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-//
 //
 //
 //
@@ -39141,22 +39138,6 @@ var render = function() {
           [_vm._v(_vm._s(_vm.takeInApi))]
         ),
         _vm._v(" "),
-        _vm.takeInApi !== 2
-          ? _c(
-              "button",
-              {
-                staticClass: "btn btn-outline-dark",
-                attrs: { type: "button" },
-                on: {
-                  click: function($event) {
-                    _vm.takeInApi = 2
-                  }
-                }
-              },
-              [_vm._v("2")]
-            )
-          : _vm._e(),
-        _vm._v(" "),
         _vm.takeInApi !== 10
           ? _c(
               "button",
@@ -39881,22 +39862,6 @@ var render = function() {
           [_vm._v(_vm._s(_vm.takeInApi))]
         ),
         _vm._v(" "),
-        _vm.takeInApi !== 2
-          ? _c(
-              "button",
-              {
-                staticClass: "btn btn-outline-dark",
-                attrs: { type: "button" },
-                on: {
-                  click: function($event) {
-                    _vm.takeInApi = 2
-                  }
-                }
-              },
-              [_vm._v("2")]
-            )
-          : _vm._e(),
-        _vm._v(" "),
         _vm.takeInApi !== 10
           ? _c(
               "button",
@@ -40550,22 +40515,6 @@ var render = function() {
           },
           [_vm._v(_vm._s(_vm.takeInApi))]
         ),
-        _vm._v(" "),
-        _vm.takeInApi !== 2
-          ? _c(
-              "button",
-              {
-                staticClass: "btn btn-outline-dark",
-                attrs: { type: "button" },
-                on: {
-                  click: function($event) {
-                    _vm.takeInApi = 2
-                  }
-                }
-              },
-              [_vm._v("2")]
-            )
-          : _vm._e(),
         _vm._v(" "),
         _vm.takeInApi !== 10
           ? _c(

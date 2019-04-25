@@ -8,7 +8,6 @@
         <div class="row justify-content-center">
             <h3>Выбирете количество тематик на странице: </h3>
             <button type="button" class="btn btn-secondary btn-lg" disabled>{{ takeInApi }}</button>
-            <button v-if="takeInApi !== 2" @click="takeInApi = 2" type="button" class="btn btn-outline-dark">2</button>
             <button v-if="takeInApi !== 10" @click="takeInApi = 10" type="button" class="btn btn-outline-dark">10</button>
             <button v-if="takeInApi !== 20" @click="takeInApi = 20" type="button" class="btn btn-outline-dark">20</button>
             <button v-if="takeInApi !== 50" @click="takeInApi = 50" type="button" class="btn btn-outline-dark">50</button>
