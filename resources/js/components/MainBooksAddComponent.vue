@@ -47,8 +47,7 @@
                                             <div class="col">
                                                 <div class="form-group">
                                                     <label for="exampleFormControlInput2">Количество страниц</label>
-                                                    <!--<input type="number" class="form-control" id="exampleFormControlInput2" step="1" min="1" name="pages" ref="pages" required>-->
-                                                    <input type="number" class="form-control" id="exampleFormControlInput2" step="1" name="pages" ref="pages" required>
+                                                    <input type="number" class="form-control" id="exampleFormControlInput2" step="1" min="1" name="pages" ref="pages" required>
                                                 </div>
                                             </div>
 

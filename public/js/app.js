@@ -2075,7 +2075,6 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
 //
 //
 //
-//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -39032,6 +39031,7 @@ var render = function() {
                                       type: "number",
                                       id: "exampleFormControlInput2",
                                       step: "1",
+                                      min: "1",
                                       name: "pages",
                                       required: ""
                                     }
