@@ -1981,6 +1981,18 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -2078,7 +2090,8 @@ __webpack_require__.r(__webpack_exports__);
       showModalDeleteBook: false,
       showModalCreadeBook: false,
       createBookData: {},
-      have_done: 0
+      have_done: 0,
+      errors: []
     };
   },
   mounted: function mounted() {
@@ -2107,27 +2120,75 @@ __webpack_require__.r(__webpack_exports__);
       var _this2 = this;
 
       event.preventDefault();
-      this.createBookData.writer = this.$refs.writer.value;
-      this.createBookData.title = this.$refs.title.value;
-      this.createBookData.genre = this.$refs.genre.value;
-      this.createBookData.pages = this.$refs.pages.value;
-      this.createBookData.year = this.$refs.year.value;
-      this.createBookData.price = this.$refs.price.value;
-      this.createBookData.isbn = this.$refs.isbn.value;
-      console.dir(this.createBookData);
-      axios.post(this.url.saveBook, this.createBookData).then(function (response) {
-        console.log(response);
+      this.errors = []; // this.checkForm(this.$refs.pages.value, 'pages');
 
-        _this2.update();
-      })["catch"](function (error) {
-        console.log(error.response);
-      });
-      this.onChange();
-      this.showModalCreadeBook = false;
+      this.createBookData.writer = this.checkForm(this.$refs.writer.value, 'writer');
+      this.createBookData.title = this.checkForm(this.$refs.title.value, 'title');
+      this.createBookData.genre = this.checkForm(this.$refs.genre.value, 'genre');
+      this.createBookData.pages = this.checkForm(this.$refs.pages.value, 'pages');
+      this.createBookData.year = this.checkForm(this.$refs.year.value, 'year');
+      this.createBookData.price = this.checkForm(this.$refs.price.value, 'price');
+      this.createBookData.isbn = this.checkForm(this.$refs.isbn.value, 'isbn');
+      console.dir(this.createBookData);
+
+      if (!this.errors.length) {
+        axios.post(this.url.saveBook, this.createBookData).then(function (response) {
+          console.log(response);
+
+          _this2.update();
+        })["catch"](function (error) {
+          console.log(error.response);
+        });
+        this.onChange();
+        this.showModalCreadeBook = false;
+      }
     },
     //запуск родительской ф-ции
     onChange: function onChange() {
       this.$emit('update');
+    },
+    checkForm: function checkForm(data, type) {
+      switch (type) {
+        case 'title':
+        case 'isbn':
+          console.log(data.length);
+          console.log(data);
+          console.log(_typeof(data));
+
+          if (data.length < 2) {
+            this.errors.push('Проверте поле ввода ' + type + '! Должно быть минимум 2 символа');
+          } else {
+            return data;
+          }
+
+          break;
+
+        case 'genre':
+        case 'writer':
+        case 'pages':
+        case 'year':
+        case 'price':
+          //Для преобразования к числу -> унарный плюс
+          data = +data;
+          console.log(data.length);
+          console.log(data);
+          console.log(_typeof(data));
+
+          if (data < 0) {
+            this.errors.push('Проверте поле ввода ' + type + '! Оно не может быть отрицательным');
+          } else {
+            return data;
+          }
+
+          break;
+
+        default:
+          alert('Данные кейс не предусмотрен!');
+      }
+    },
+    showModalCreadeBookFun: function showModalCreadeBookFun() {
+      this.showModalCreadeBook = false;
+      this.errors = [];
     }
   }
 });
@@ -38855,6 +38916,22 @@ var render = function() {
                       _vm._m(0),
                       _vm._v(" "),
                       _c("div", { staticClass: "conf-step__wrapper" }, [
+                        _vm.errors.length
+                          ? _c("p", { staticStyle: { color: "red" } }, [
+                              _c("b", [
+                                _vm._v("Пожалуйста исправьте указанные ошибки:")
+                              ]),
+                              _vm._v(" "),
+                              _c(
+                                "ul",
+                                _vm._l(_vm.errors, function(error) {
+                                  return _c("li", [_vm._v(_vm._s(error))])
+                                }),
+                                0
+                              )
+                            ])
+                          : _vm._e(),
+                        _vm._v(" "),
                         _c(
                           "form",
                           {
@@ -38955,7 +39032,6 @@ var render = function() {
                                       type: "number",
                                       id: "exampleFormControlInput2",
                                       step: "1",
-                                      min: "1",
                                       name: "pages",
                                       required: ""
                                     }
@@ -39049,7 +39125,7 @@ var render = function() {
                                 on: {
                                   click: function($event) {
                                     $event.preventDefault()
-                                    _vm.showModalCreadeBook = false
+                                    return _vm.showModalCreadeBookFun($event)
                                   }
                                 }
                               },

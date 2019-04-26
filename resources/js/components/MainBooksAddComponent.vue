@@ -13,6 +13,15 @@
                                 </header>
                                 <div class="conf-step__wrapper">
 
+                                    <!--ERROR-->
+                                    <p v-if="errors.length" style="color:red">
+                                        <b>Пожалуйста исправьте указанные ошибки:</b>
+                                        <ul>
+                                            <li v-for="error in errors">{{ error }}</li>
+                                        </ul>
+                                    </p>
+                                    <!--END ERROR-->
+
                                     <form method="post" v-on:submit="submitDo">
                                     <!--<form method="post" action="/api-save-book">-->
                                         <!--<input type="hidden" name="_token" :value="csrf">-->
@@ -38,7 +47,8 @@
                                             <div class="col">
                                                 <div class="form-group">
                                                     <label for="exampleFormControlInput2">Количество страниц</label>
-                                                    <input type="number" class="form-control" id="exampleFormControlInput2" step="1" min="1" name="pages" ref="pages" required>
+                                                    <!--<input type="number" class="form-control" id="exampleFormControlInput2" step="1" min="1" name="pages" ref="pages" required>-->
+                                                    <input type="number" class="form-control" id="exampleFormControlInput2" step="1" name="pages" ref="pages" required>
                                                 </div>
                                             </div>
 
@@ -64,7 +74,7 @@
 
                                         <!--<button class="btn btn-primary" @click.prevent="createBook">Добавить</button>-->
                                         <button class="btn btn-primary" type="submit">Добавить</button>
-                                        <button class="btn btn-primary" @click.prevent="showModalCreadeBook=false">Отмена</button>
+                                        <button class="btn btn-primary" @click.prevent="showModalCreadeBookFun">Отмена</button>
                                     </form>
 
                                 </div>
@@ -97,6 +107,7 @@
                 showModalCreadeBook: false,
                 createBookData: {},
                 have_done: 0,
+                errors: [],
             }
         },
 
@@ -132,34 +143,77 @@
 
             submitDo: function (event) {
                 event.preventDefault();
+                this.errors = [];
 
-                this.createBookData.writer = this.$refs.writer.value;
-                this.createBookData.title = this.$refs.title.value;
-                this.createBookData.genre = this.$refs.genre.value;
-                this.createBookData.pages = this.$refs.pages.value;
-                this.createBookData.year = this.$refs.year.value;
-                this.createBookData.price = this.$refs.price.value;
-                this.createBookData.isbn = this.$refs.isbn.value;
+                // this.checkForm(this.$refs.pages.value, 'pages');
+                this.createBookData.writer = this.checkForm(this.$refs.writer.value, 'writer');
+                this.createBookData.title = this.checkForm(this.$refs.title.value, 'title');
+                this.createBookData.genre = this.checkForm(this.$refs.genre.value, 'genre');
+                this.createBookData.pages = this.checkForm(this.$refs.pages.value, 'pages');
+                this.createBookData.year = this.checkForm(this.$refs.year.value, 'year');
+                this.createBookData.price = this.checkForm(this.$refs.price.value, 'price');
+                this.createBookData.isbn = this.checkForm(this.$refs.isbn.value, 'isbn');
 
                 console.dir(this.createBookData);
 
-                axios.post(this.url.saveBook, this.createBookData)
-                    .then(response => {
-                        console.log(response);
-                        this.update();
-                    })
-                    .catch(error => {
-                        console.log(error.response);
-                    });
+                if (!this.errors.length) {
+                    axios.post(this.url.saveBook, this.createBookData)
+                        .then(response => {
+                            console.log(response);
+                            this.update();
+                        })
+                        .catch(error => {
+                            console.log(error.response);
+                        });
 
-                this.onChange();
-                this.showModalCreadeBook=false;
+                    this.onChange();
+                    this.showModalCreadeBook=false;
+                }
 
             },
 
             //запуск родительской ф-ции
             onChange () {
                 this.$emit('update')
+            },
+
+            checkForm: function(data, type) {
+                switch (type) {
+                    case 'title':
+                    case 'isbn':
+                        console.log(data.length);
+                        console.log(data);
+                        console.log(typeof data);
+                        if (data.length < 2) {
+                            this.errors.push('Проверте поле ввода ' + type + '! Должно быть минимум 2 символа');
+                        } else {
+                            return data;
+                        }
+                        break;
+                    case 'genre':
+                    case 'writer':
+                    case 'pages':
+                    case 'year':
+                    case 'price':
+                        //Для преобразования к числу -> унарный плюс
+                        data = +data;
+                        console.log(data.length);
+                        console.log(data);
+                        console.log(typeof data);
+                        if (data < 0) {
+                            this.errors.push('Проверте поле ввода ' + type + '! Оно не может быть отрицательным');
+                        } else {
+                            return data;
+                        }
+                        break;
+                    default:
+                        alert('Данные кейс не предусмотрен!');
+                }
+            },
+
+            showModalCreadeBookFun() {
+                this.showModalCreadeBook=false;
+                this.errors = [];
             }
 
 
